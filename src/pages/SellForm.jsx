@@ -179,10 +179,10 @@ function SellForm() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-6 text-gray-700"
+          className="flex flex-col gap-6 text-gray-700 border -border-gray-100 p-4  rounded-2xl"
         >
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Buscar Producto</label>
+            <label className="block text-sm font-medium text-gray-900 dark:text-white mb-2">Buscar Producto</label>
             <input
               name="search-input"
               type="text"
@@ -200,7 +200,7 @@ function SellForm() {
           />
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Cantidad</label>
+            <label className="block text-sm font-medium text-gray-900 dark:text-white mb-2">Cantidad</label>
             <input
               name="quantity"
               type="number"
@@ -284,7 +284,6 @@ function SellForm() {
           <h2 className="flex justify-between items-center mb-6">
             <span className="text-2xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
               <FontAwesomeIcon icon={faCartShopping} className="text-blue-500 dark:text-blue-400" />
-              Carrito
             </span>
             <span className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm font-semibold">
               {car.length} artículos
