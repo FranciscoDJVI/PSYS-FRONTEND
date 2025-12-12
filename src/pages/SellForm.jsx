@@ -154,6 +154,7 @@ function SellForm() {
     setSubtotal(0);
     setChange(0);
   };
+
   useEffect(() => {
     const subtotalCart = totalSell / (1 + IVA);
     const ivaCart = totalSell - subtotalCart;
@@ -162,6 +163,7 @@ function SellForm() {
     setTotal(totalSell);
     setChange(sellFormData.quantity_pay - totalSell);
   }, [totalSell, sellFormData.quantity_pay]);
+
   return (
     <div className="bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-8 mb-0 border border-gray-200 dark:border-gray-700 overflow-y-auto min-h-screen">
       {loading && <p className="text-blue-500 text-center">Cargando...</p>}
