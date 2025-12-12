@@ -148,6 +148,11 @@ function SellForm() {
       setTotal(0)
       setSelectedProduct(null);
     }
+    // Reset states to 0 after each sale.
+    setTotalSell(0);
+    setIva(0);
+    setSubtotal(0);
+    setChange(0);
   };
   useEffect(() => {
     const subtotalCart = totalSell / (1 + IVA);
