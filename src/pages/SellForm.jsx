@@ -28,6 +28,8 @@ function SellForm() {
   const [change, setChange] = useState(0)
   const [car, setCar] = useState([])
   const [totalSell, setTotalSell] = useState(0)
+  const [selectedProduct, setSelectedProduct] = useState(null)
+  const [apiSells, setApiSells] = useState([])
   const handleChangeSearch = (e) => {
     setQuery(e.target.value);
   };
@@ -38,31 +40,25 @@ function SellForm() {
       setLoading(false);
       return;
     }
-
     setLoading(true);
 
     const normalizedQuery = searchQuery.trim().toLowerCase();
-
     try {
       const allData = await GetproductsSearch();
       const res = allData.data;
       console.log(res)
-
       const productSearch = res.filter(producto =>
         producto.name.toLowerCase().includes(normalizedQuery)
       );
-
       setResults(productSearch);
-
     } catch (error) {
       console.error("Error al obtener o filtrar productos:", error);
       setResults([]);
-
     } finally {
       setLoading(false);
     }
-
   }, [setResults, setLoading]);
+
   useEffect(() => {
     const normaliceQuery = query.toLowerCase()
     const delayDebounceFn = setTimeout(() => {
@@ -81,52 +77,65 @@ function SellForm() {
       [e.target.name]: e.target.value,
     });
   };
+
   const handleAddCar = async (e) => {
     e.preventDefault();
-
-    const id = sellFormData.id_product
+    if (!selectedProduct) {
+      toast.error("Selecciona un producto primero.");
+      return;
+    }
     const quantity = parseInt(sellFormData.quantity)
-    const quantityPay = parseInt(sellFormData.quantity_pay)
+    const sellSubtotal = selectedProduct.price * quantity;
     const typePay = sellFormData.type_pay
-    const productName = sellFormData.name
+    // Data for rendering
     const sellData = {
-      "details": {
-        "id_product_sell": id,
-        'name_product_sell': productName,
-        "quantity_sell": quantity,
-        "quantity_pay": quantityPay,
-        "type_pay": typePay,
-        'total': total,
-      },
-      "totalSell": total
+      "sells": [
+        {
+          'product': selectedProduct.name,
+          "quantity": quantity,
+          "sell_subtotal": sellSubtotal
+        }
+      ],
+      'type_pay': typePay
     };
-
-
+    // Data to send to API.
+    const apiItem = {
+      "product": selectedProduct.id,
+      "product_name": selectedProduct.name,
+      "product_price": selectedProduct.price.toString(),
+      "quantity": quantity,
+      "sell_subtotal": sellSubtotal.toString()
+    };
     setCar(prevCar => [...prevCar, sellData]);
-    setTotalSell(prevTotal => prevTotal + sellData.totalSell)
+    setApiSells(prev => [...prev, apiItem]);
+    setTotalSell(prevTotal => prevTotal + sellSubtotal);
     setFormData(INITIAL_STATE)
     setQuery("")
+    setSelectedProduct(null);
     setTotal(0)
     setIva(0)
     setSubtotal(0)
     setChange(0)
   }
   const deleteItem = (indexToDelete) => {
+    const itemToDelete = car[indexToDelete];
     const newCar = car.filter((_, i) => i !== indexToDelete);
+    const newApiSells = apiSells.filter((_, i) => i !== indexToDelete);
     setCar(newCar)
-    setTotalSell(0)
+    setApiSells(newApiSells)
+    setTotalSell(prevTotal => prevTotal - itemToDelete.sells[0].sell_subtotal);
   }
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (car.length === 0) {
       toast.error("El carrito está vacío. Agregue productos para vender.");
       return;
     }
     const dataToSend = {
-      "detail_sell": car,
-
-    }
+      sells: apiSells,
+      type_pay: sellFormData.type_pay
+    };
+    console.log(dataToSend)
     const response = await PostSell(dataToSend);
     if (response.status !== 201) {
       toast.error("Error al realizar la venta");
@@ -134,22 +143,19 @@ function SellForm() {
       toast.success("Venta realizada con éxito!");
       setFormData(INITIAL_STATE);
       setCar([])
+      setApiSells([])
       setTotal(0)
+      setSelectedProduct(null);
     }
-
   };
-
   useEffect(() => {
-    if (sellFormData.price && sellFormData.quantity) {
-      setTotal(sellFormData.price * sellFormData.quantity);
-      setSubtotal((sellFormData.price * sellFormData.quantity) - ((sellFormData.price * sellFormData.quantity)) * IVA)
-      setIva((sellFormData.price * sellFormData.quantity) * IVA)
-      setChange(sellFormData.quantity_pay - (sellFormData.price * sellFormData.quantity))
-    } else {
-      setTotal(0);
-    }
-  }, [sellFormData.price, sellFormData.quantity, sellFormData.quantity_pay]);
-
+    const subtotalCart = totalSell / (1 + IVA);
+    const ivaCart = totalSell - subtotalCart;
+    setSubtotal(subtotalCart);
+    setIva(ivaCart);
+    setTotal(totalSell);
+    setChange(sellFormData.quantity_pay - totalSell);
+  }, [totalSell, sellFormData.quantity_pay]);
   return (
     <div className="bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-8 mb-0 border border-gray-200 dark:border-gray-700 overflow-y-auto min-h-screen">
       {loading && <p className="text-blue-500 text-center">Cargando...</p>}
@@ -165,6 +171,7 @@ function SellForm() {
                   name: product.name,
                   price: product.price,
                 });
+                setSelectedProduct(product); // Set selected product
                 setQuery(product.name);
                 setResults([]);
               }}
@@ -175,7 +182,6 @@ function SellForm() {
           ))}
         </ul>
       )}
-
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <form
           onSubmit={handleSubmit}
@@ -189,16 +195,14 @@ function SellForm() {
               placeholder="Buscar producto..."
               value={query}
               onChange={handleChangeSearch}
-              className="w-full p-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+              className="w-full p-3 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
             />
           </div>
-
           <input type="hidden"
             name="id_product"
             value={sellFormData.id_product}
             onChange={handleChange}
           />
-
           <div>
             <label className="block text-sm font-medium text-gray-900 dark:text-white mb-2">Cantidad</label>
             <input
@@ -208,10 +212,9 @@ function SellForm() {
               value={sellFormData.quantity}
               onChange={handleChange}
               required
-              className="w-full p-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+              className="w-full p-3 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
             />
           </div>
-
           <div className="flex gap-4 mt-6">
             <button
               type="submit"
@@ -219,7 +222,6 @@ function SellForm() {
             >
               Vender
             </button>
-
             <button
               type="button"
               onClick={handleAddCar}
@@ -229,35 +231,33 @@ function SellForm() {
               Agregar al Carrito
             </button>
           </div>
-
         </form>
-        <aside className="bg-gray-50 dark:bg-gray-700 p-6 rounded-2xl shadow-md border border-gray-200 dark:border-gray-600">
+        <aside className="bg-gray-50 dark:bg-gray-700 p-6 rounded-2xl shadow-md border border-gray-500 dark:border-gray-600">
           <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-4 text-center">Resumen</h3>
           <div className="space-y-3">
-            <div className="flex justify-between items-center p-3 bg-white dark:bg-gray-600 rounded-lg border">
+            <div className="flex justify-between items-center p-3 bg-white dark:bg-gray-900 rounded-lg">
               <span className="font-medium text-gray-700 dark:text-gray-300">Subtotal:</span>
               <span className="font-bold text-green-600 dark:text-green-400">{FormatterPesos(subtotal)}</span>
             </div>
-            <div className="flex justify-between items-center p-3 bg-white dark:bg-gray-600 rounded-lg border">
+            <div className="flex justify-between items-center p-3 bg-white dark:bg-gray-900 rounded-lg">
               <span className="font-medium text-gray-700 dark:text-gray-300">IVA:</span>
               <span className="font-bold text-blue-600 dark:text-blue-400">{FormatterPesos(iva)}</span>
             </div>
-            <div className="flex justify-between items-center p-3 bg-white dark:bg-gray-600 rounded-lg border">
+            <div className="flex justify-between items-center p-3 bg-white dark:bg-gray-900 rounded-lg">
               <span className="font-medium text-gray-700 dark:text-gray-300">Total:</span>
               <span className="font-bold text-green-600 dark:text-green-400">{FormatterPesos(total)}</span>
             </div>
-            <div className="flex justify-between items-center p-3 bg-white dark:bg-gray-600 rounded-lg border">
+            <div className="flex justify-between items-center p-3 bg-white dark:bg-gray-900 rounded-lg">
               <span className="font-medium text-gray-700 dark:text-gray-300">Cambio:</span>
               <span className="font-bold text-red-600 dark:text-red-400">{FormatterPesos(change)}</span>
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Método de Pago</label>
               <select
                 name="type_pay"
                 value={sellFormData.type_pay}
                 onChange={handleChange}
-                className="w-full p-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-gray-900 dark:text-white"
+                className="w-full p-3 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-gray-900 dark:text-white"
               >
                 <option value="Efectivo">Efectivo</option>
                 <option value="Tarjeta debito">Tarjeta Débito</option>
@@ -265,7 +265,6 @@ function SellForm() {
                 <option value="Transferencia">Transferencia</option>
               </select>
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Monto Pagado</label>
               <input
@@ -275,29 +274,29 @@ function SellForm() {
                 value={sellFormData.quantity_pay}
                 onChange={handleChange}
                 required
-                className="w-full p-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+                className="w-full p-3 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
               />
             </div>
           </div>
         </aside>
         <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md border border-gray-200 dark:border-gray-700">
           <h2 className="flex justify-between items-center mb-6">
-            <span className="text-2xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
+            <span className="text-4xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
               <FontAwesomeIcon icon={faCartShopping} className="text-blue-500 dark:text-blue-400" />
             </span>
-            <span className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm font-semibold">
+            <span className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-xl font-semibold">
               {car.length} artículos
             </span>
           </h2>
           <div className="max-h-64 overflow-y-auto mb-4">
             <ul className="space-y-3">
               {car.map((item, index) => (
-                <li key={index} className="flex justify-between items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                <li key={index} className="flex justify-between items-center p-4 bg-gray-50 dark:bg-gray-900 rounded-lg shadow-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
                   <div className="flex-1">
-                    <div className="font-semibold text-gray-800 dark:text-gray-200">{item.details.name_product_sell}</div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">Cantidad: {item.details.quantity_sell}</div>
+                    <div className="font-semibold text-gray-800 dark:text-gray-200">{item.sells[0].product}</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">Cantidad: {item.sells[0].quantity}</div>
                   </div>
-                  <div className="font-bold text-green-600 dark:text-green-400 mr-4">{FormatterPesos(item.totalSell)}</div>
+                  <div className="font-bold text-green-600 dark:text-green-400 mr-4">{FormatterPesos(item.sells[0].sell_subtotal)}</div>
                   <button
                     type="button"
                     onClick={() => deleteItem(index)}
@@ -320,5 +319,4 @@ function SellForm() {
     </div >
   );
 }
-
 export default SellForm;
