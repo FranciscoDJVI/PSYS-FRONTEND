@@ -34,6 +34,7 @@ function SellForm() {
     setQuery(e.target.value);
   };
 
+  // Search product
   const fetchProductSearch = useCallback(async (searchQuery) => {
     if (!searchQuery || searchQuery.trim().length < 3) {
       setResults([]);
@@ -77,7 +78,7 @@ function SellForm() {
       [e.target.name]: e.target.value,
     });
   };
-
+  // Add products to car and send data.
   const handleAddCar = async (e) => {
     e.preventDefault();
     if (!selectedProduct) {
