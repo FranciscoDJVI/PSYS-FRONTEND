@@ -39,11 +39,10 @@ function UpdateProductPage() {
     return <p>{error}</p>;
   }
 
-
   return (
-    <div>
-      <header className="bg-white shadow-md p-6 rounded-lg mb-8 border border-gray-200 text-center">
-        <h1 className="text-3xl font-bold text-gray-800">Actualizar Producto</h1>
+    <div className='h-ful min-h-screen bg-gray-1000 dark:b-gray-900 p-8'>
+      <header className="bg-white dark:bg-gray-800 shadow-md p-6 rounded-lg mb-8 text-center">
+        <h1 className="text-3xl font-bold text-white">Actualizar Producto</h1>
       </header>
       <ProductForm
         onSubmit={handleUpdate}
@@ -56,4 +55,3 @@ function UpdateProductPage() {
 }
 
 export default UpdateProductPage;
-
