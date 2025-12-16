@@ -8,10 +8,13 @@ export function useSells() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  //Pagination states
+  // Pagination states
   const [nextPage, setNextPage] = useState(null);
   const [prevPage, setPrevPage] = useState(null);
   const [totalCount, setTotalCount] = useState(0);
+
+  // Total sells price
+  const [totalSalesPrice, setTotalSellsPrice] = useState(0);
 
   const loadSells = async (url = null) => {
     try {
@@ -21,6 +24,7 @@ export function useSells() {
       setNextPage(res.data.next);
       setPrevPage(res.data.previous);
       setTotalCount(res.data.count);
+      setTotalSellsPrice(res.data.total_sales);
     } catch (error) {
       setError(error);
       logger.error("Error al cargar ventas:", error);
@@ -55,6 +59,7 @@ export function useSells() {
     nextPage,
     prevPage,
     totalCount,
+    totalSalesPrice,
     goToNext,
     goToPrevious,
   };

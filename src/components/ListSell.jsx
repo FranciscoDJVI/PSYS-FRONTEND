@@ -1,7 +1,6 @@
 import { useSells } from "../hooks/useSells";
 import FormatterPesos from "../utils/CurrencyFormatter";
 
-
 function ListSellRegister() {
   const {
     sells,
@@ -10,6 +9,7 @@ function ListSellRegister() {
     nextPage,
     prevPage,
     totalCount,
+    totalSalesPrice,
     goToNext,
     goToPrevious,
   } = useSells();
@@ -83,6 +83,10 @@ function ListSellRegister() {
 
         <span className="text-xl font-medium text-gray-700 dark:text-gray-300">
           Total de Ventas: {totalCount}
+        </span>
+
+        <span className="text-xl font-medium text-gray-700 dark:text-gray-300">
+          Dinero/Ventas: {FormatterPesos(totalSalesPrice)}
         </span>
 
         <button
