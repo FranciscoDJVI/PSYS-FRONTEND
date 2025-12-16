@@ -8,16 +8,6 @@ import FormatterPesos from "../utils/CurrencyFormatter";
 import logger from "../utils/logger";
 import { useSellContext } from "../context/useSellContextHook";
 
-
-const INITIAL_STATE = {
-  id_product: "",
-  name: "",
-  quantity: 0,
-  quantity_pay: 0,
-  type_pay: "Efectivo",
-  price: 0
-};
-
 const IVA = 0.19
 
 function SellForm() {
@@ -46,10 +36,10 @@ function SellForm() {
     showResults
   } = state;
 
-  const subtotal = totalSell / (1 + IVA);
-  const iva = totalSell - subtotal;
-  const total = totalSell;
-  const change = sellFormData.quantity_pay - totalSell;
+  const subtotal = totalSell;
+  const iva = (subtotal * IVA);
+  const total = subtotal + iva;
+  const change = parseFloat(sellFormData.quantity_pay || 0) - total;
 
   const handleChangeSearch = (e) => {
     setQuery(e.target.value);
@@ -353,7 +343,7 @@ function SellForm() {
           <div className="border-t border-gray-300 dark:border-gray-600 pt-4">
             <div className="flex justify-between items-center text-xl font-bold">
               <span className="text-gray-800 dark:text-white">Total:</span>
-              <span className="text-green-600 dark:text-green-400">{FormatterPesos(totalSell)}</span>
+              <span className="text-green-600 dark:text-green-400">{FormatterPesos(total)}</span>
             </div>
           </div>
         </div>
