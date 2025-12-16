@@ -35,20 +35,20 @@ function ProductForm({
         onSubmit={handleFormSubmit}
         className="flex flex-col gap-6 items-center text-gray-700"
       >
-          <input
-            type="text"
-            placeholder="Nombre"
-            className="w-full md:w-1/2 p-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
-            {...register('name', { required: 'El nombre es obligatorio' })}
-          />
+        <input
+          type="text"
+          placeholder="Nombre"
+          className="w-full md:w-1/2 p-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+          {...register('name', { required: 'El nombre es obligatorio' })}
+        />
         {errors.name && <span className="text-red-500">{errors.name.message}</span>}
 
-          <input
-            type="text"
-            placeholder="Marca"
-            className="w-full md:w-1/2 p-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
-            {...register('brand', { required: 'La marca es obligatoria' })}
-          />
+        <input
+          type="text"
+          placeholder="Marca"
+          className="w-full md:w-1/2 p-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+          {...register('brand', { required: 'La marca es obligatoria' })}
+        />
         {errors.brand && <span className="text-red-500">{errors.brand.message}</span>}
 
         <input
@@ -67,43 +67,43 @@ function ProductForm({
 
         {errors.price && <span className="text-red-500">{errors.price.message}</span>}
 
-          <textarea
-            placeholder="Descripción"
-            className="w-full md:w-1/2 p-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors resize-none text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
-            rows="4"
-            {...register('description')}
-          />
-          <input
-            type="number"
-            placeholder="Precio"
-            step="0.01"
-            className="w-full md:w-1/2 p-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
-            {...register('price', {
-              required: 'El precio es obligatorio',
-              valueAsNumber: true
-            })}
-          />
+        <textarea
+          placeholder="Descripción"
+          className="w-full md:w-1/2 p-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors resize-none text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+          rows="4"
+          {...register('description')}
+        />
+        <input
+          type="number"
+          placeholder="Precio"
+          step="0.01"
+          className="w-full md:w-1/2 p-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+          {...register('price', {
+            required: 'El precio es obligatorio',
+            valueAsNumber: true
+          })}
+        />
 
-          <input
-            type="number"
-            placeholder="Stock"
-            step="0.01"
-            className="w-full md:w-1/2 p-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
-            {...register('stock', {
-              required: 'El stock es obligatorio',
-              valueAsNumber: true
-            })}
-          />
+        <input
+          type="number"
+          placeholder="Stock"
+          step="0.01"
+          className="w-full md:w-1/2 p-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+          {...register('stock', {
+            required: 'El stock es obligatorio',
+            valueAsNumber: true
+          })}
+        />
         <div className="w-full md:w-1/2 flex gap-4 mt-6">
           <button
             type="submit"
-            className="flex-1 bg-gradient-to-r from-green-500 to-green-600 dark:from-green-600 dark:to-green-700 text-white font-semibold py-3 rounded-lg hover:from-green-600 hover:to-green-700 dark:hover:from-green-700 dark:hover:to-green-800 shadow-md hover:shadow-lg transition-all duration-300"
+            className="flex-1 bg-linear-to-r from-green-500 to-green-600 dark:from-green-600 dark:to-green-700 text-white font-semibold py-3 rounded-lg hover:from-green-600 hover:to-green-700 dark:hover:from-green-700 dark:hover:to-green-800 shadow-md hover:shadow-lg transition-all duration-300"
           >
             {buttonText}
           </button>
           <button
             type="button"
-            className="flex-1 bg-gradient-to-r from-gray-500 to-gray-600 dark:from-gray-600 dark:to-gray-700 text-white font-semibold py-3 rounded-lg hover:from-gray-600 hover:to-gray-700 dark:hover:from-gray-700 dark:hover:to-gray-800 shadow-md hover:shadow-lg transition-all duration-300"
+            className="flex-1 bg-linear-to-r from-gray-500 to-gray-600 dark:from-gray-600 dark:to-gray-700 text-white font-semibold py-3 rounded-lg hover:from-gray-600 hover:to-gray-700 dark:hover:from-gray-700 dark:hover:to-gray-800 shadow-md hover:shadow-lg transition-all duration-300"
             onClick={() => navigate('/products')}
           >
             Cancelar

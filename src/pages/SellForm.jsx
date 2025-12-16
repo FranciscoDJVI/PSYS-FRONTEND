@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useEffect, useCallback } from "react";
 import { GetproductsSearch } from "../api/api.products";
 import toast from 'react-hot-toast';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -6,6 +6,8 @@ import { faCartShopping, faShoppingBag, faTrash } from "@fortawesome/free-solid-
 import { PostSell } from "../api/api.sell"
 import FormatterPesos from "../utils/CurrencyFormatter";
 import logger from "../utils/logger";
+import { useSellContext } from "../context/useSellContextHook";
+
 
 const INITIAL_STATE = {
   id_product: "",
@@ -19,58 +21,91 @@ const INITIAL_STATE = {
 const IVA = 0.19
 
 function SellForm() {
-  const [sellFormData, setFormData] = useState(INITIAL_STATE);
-  const [query, setQuery] = useState("");
-  const [results, setResults] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [total, setTotal] = useState(0);
-  const [iva, setIva] = useState(0)
-  const [subtotal, setSubtotal] = useState(0)
-  const [change, setChange] = useState(0)
-  const [car, setCar] = useState([])
-  const [totalSell, setTotalSell] = useState(0)
-  const [selectedProduct, setSelectedProduct] = useState(null)
-  const [apiSells, setApiSells] = useState([])
+  const {
+    state,
+    setQuery,
+    setResults,
+    setLoading,
+    setSelectedProduct,
+    setFormData,
+    addToCart,
+    removeFromCart,
+    setSearchState,
+    setShowResults,
+    resetSell
+  } = useSellContext();
+
+  const {
+    results,
+    loading,
+    query,
+    car,
+    apiSells,
+    totalSell,
+    sellFormData,
+    showResults
+  } = state;
+
+  const subtotal = totalSell / (1 + IVA);
+  const iva = totalSell - subtotal;
+  const total = totalSell;
+  const change = sellFormData.quantity_pay - totalSell;
+
   const handleChangeSearch = (e) => {
     setQuery(e.target.value);
   };
 
-  // Search product
   const fetchProductSearch = useCallback(async (searchQuery) => {
     if (!searchQuery || searchQuery.trim().length < 3) {
       setResults([]);
       setLoading(false);
+      setShowResults(false);
+      setSearchState('idle');
       return;
     }
-    setLoading(true);
-
-    const normalizedQuery = searchQuery.trim().toLowerCase();
+    setSearchState('searching');
+    setShowResults(true);
     try {
-      const allData = await GetproductsSearch();
-      const res = allData.data;
-      const productSearch = res.filter(producto =>
-        producto.name.toLowerCase().includes(normalizedQuery)
-      );
-      setResults(productSearch);
+      // API call con timeout razonable
+      const response = await GetproductsSearch();
+
+      if (!response.data || !Array.isArray(response.data)) {
+        throw new Error('Invalid API response format');
+      }
+      // Filtrado client-side
+      const filteredProducts = response.data.filter(producto => {
+        if (!producto || !producto.name) return false;
+        return producto.name.toLowerCase().includes(searchQuery.toLowerCase());
+      });
+      // Actualizar estado
+      setResults(filteredProducts);
+      setSearchState('results');
+
     } catch (error) {
-      logger.error("Error al obtener o filtrar productos:", error);
+      console.error('Search error:', error);
       setResults([]);
+      setSearchState('error');
+      setShowResults(false);
     } finally {
       setLoading(false);
     }
-  }, [setResults, setLoading]);
+  }, [setResults, setLoading, setSearchState, setShowResults]);
 
   useEffect(() => {
-    const normaliceQuery = query.toLowerCase()
-    const delayDebounceFn = setTimeout(() => {
-      if (normaliceQuery.length >= 3) {
-        fetchProductSearch(normaliceQuery);
-      } else {
-        setResults([]);
-      }
-    }, 200);
-    return () => clearTimeout(delayDebounceFn);
-  }, [query, fetchProductSearch]);
+    const normalizedQuery = query.trim();
+
+    if (normalizedQuery.length < 3) {
+      setResults([]);
+      setShowResults(false);
+      setLoading(false);
+      setSearchState('idle');
+      return;
+    }
+    const debounceTimer = setTimeout(() => {
+      fetchProductSearch(normalizedQuery);
+    }, 300);
+    return () => clearTimeout(debounceTimer);
+  }, [query, fetchProductSearch, setLoading, setResults, setSearchState, setShowResults]);
 
   const handleChange = (e) => {
     setFormData({
@@ -81,50 +116,38 @@ function SellForm() {
   // Add products to car and send data.
   const handleAddCar = async (e) => {
     e.preventDefault();
-    if (!selectedProduct) {
+    if (!state.selectedProduct) {
       toast.error("Selecciona un producto primero.");
       return;
     }
     const quantity = parseInt(sellFormData.quantity)
-    const sellSubtotal = selectedProduct.price * quantity;
+    const sellSubtotal = state.selectedProduct.price * quantity;
     const typePay = sellFormData.type_pay
-    // Data for rendering
-    const sellData = {
-      "sells": [
-        {
-          'product': selectedProduct.name,
-          "quantity": quantity,
-          "sell_subtotal": sellSubtotal
-        }
-      ],
-      'type_pay': typePay
+
+    const item = {
+      display: {
+        sells: [{
+          product: state.selectedProduct.name,
+          quantity: quantity,
+          sell_subtotal: sellSubtotal
+        }],
+        type_pay: typePay
+      },
+      api: {
+        product: state.selectedProduct.id,
+        product_name: state.selectedProduct.name,
+        product_price: state.selectedProduct.price.toString(),
+        quantity: quantity,
+        sell_subtotal: sellSubtotal.toString()
+      }
     };
-    // Data to send to API.
-    const apiItem = {
-      "product": selectedProduct.id,
-      "product_name": selectedProduct.name,
-      "product_price": selectedProduct.price.toString(),
-      "quantity": quantity,
-      "sell_subtotal": sellSubtotal.toString()
-    };
-    setCar(prevCar => [...prevCar, sellData]);
-    setApiSells(prev => [...prev, apiItem]);
-    setTotalSell(prevTotal => prevTotal + sellSubtotal);
-    setFormData(INITIAL_STATE)
-    setQuery("")
+
+    addToCart(item);
+    setQuery("");
     setSelectedProduct(null);
-    setTotal(0)
-    setIva(0)
-    setSubtotal(0)
-    setChange(0)
   }
   const deleteItem = (indexToDelete) => {
-    const itemToDelete = car[indexToDelete];
-    const newCar = car.filter((_, i) => i !== indexToDelete);
-    const newApiSells = apiSells.filter((_, i) => i !== indexToDelete);
-    setCar(newCar)
-    setApiSells(newApiSells)
-    setTotalSell(prevTotal => prevTotal - itemToDelete.sells[0].sell_subtotal);
+    removeFromCart(indexToDelete);
   }
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -144,11 +167,7 @@ function SellForm() {
         toast.error("Error al realizar la venta");
       } else {
         toast.success("Venta realizada con éxito!");
-        setFormData(INITIAL_STATE);
-        setCar([])
-        setApiSells([])
-        setTotal(0)
-        setSelectedProduct(null);
+        resetSell();
       }
     } catch (error) {
       // Error ya está loggeado por axiosClient interceptor
@@ -157,48 +176,54 @@ function SellForm() {
       }
       toast.error("Error al realizar la venta. Verifica tu conexión.");
     }
-    // Reset states to 0 after each sale.
-    setTotalSell(0);
-    setIva(0);
-    setSubtotal(0);
-    setChange(0);
   };
 
-  useEffect(() => {
-    const subtotalCart = totalSell / (1 + IVA);
-    const ivaCart = totalSell - subtotalCart;
-    setSubtotal(subtotalCart);
-    setIva(ivaCart);
-    setTotal(totalSell);
-    setChange(sellFormData.quantity_pay - totalSell);
-  }, [totalSell, sellFormData.quantity_pay]);
+
 
   return (
     <div className="bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-8 mb-0 border border-gray-200 dark:border-gray-700 overflow-y-auto min-h-screen">
-      {loading && <p className="text-blue-500 text-center">Cargando...</p>}
-      {!loading && results.length > 0 && (
-        <ul className="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg mb-6 max-h-40 overflow-y-auto shadow-inner">
-          {results.map((product) => (
-            <li
-              key={product.id}
-              onClick={() => {
-                setFormData({
-                  ...sellFormData,
-                  id_product: product.id,
-                  name: product.name,
-                  price: product.price,
-                });
-                setSelectedProduct(product); // Set selected product
-                setQuery(product.name);
-                setResults([]);
-              }}
-              className="p-3 hover:bg-blue-50 dark:hover:bg-blue-900 cursor-pointer transition-colors duration-200 border-b border-gray-200 dark:border-gray-600 last:border-b-0 text-gray-900 dark:text-white"
-            >
-              <span className="font-semibold text-gray-800">{product.id}</span> - {product.name} - <span className="text-green-600 font-bold">Precio: ${product.price}</span>
-            </li>
-          ))}
-        </ul>
+      {showResults && (
+        <div className="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg mb-6 shadow-inner">
+          {loading && (
+            <div className="p-3 text-center">
+              <p className="text-blue-500 animate-pulse">Buscando productos...</p>
+            </div>
+          )}
+
+          {!loading && results.length > 0 && (
+            <ul className="max-h-40 overflow-y-auto">
+              {results.map((product) => (
+                <li
+                  key={product.id}
+                  onClick={() => {
+                    setFormData({
+                      ...sellFormData,
+                      id_product: product.id,
+                      name: product.name,
+                      price: product.price,
+                    });
+                    setSelectedProduct(product);
+                    setQuery(product.name);
+                    setResults([]);
+                    setShowResults(false);
+                    setSearchState('idle');
+                  }}
+                  className="p-3 hover:bg-blue-50 dark:hover:bg-blue-900 cursor-pointer transition-colors duration-200 border-b border-gray-200 dark:border-gray-600 last:border-b-0 text-gray-900 dark:text-white"
+                >
+                  <span className="font-semibold text-gray-800">{product.id}</span> - {product.name} - <span className="text-green-600 font-bold">Precio: ${product.price}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {!loading && results.length === 0 && (
+            <div className="p-3 text-center">
+              <p className="text-gray-500">No se encontraron productos que coincidan con tu búsqueda</p>
+            </div>
+          )}
+        </div>
       )}
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <form
           onSubmit={handleSubmit}

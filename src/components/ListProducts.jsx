@@ -41,12 +41,12 @@ function ListProduct() {
     <div className="p-6 overflow-x-auto">
       <div className="min-w-full shadow-2xl rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
         <div className="mb-6 flex justify-end">
-          <Link to={'/add-products/'} className="bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex items-center gap-2 font-semibold">
+          <Link to={'/add-products/'} className="bg-linear-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex items-center gap-2 font-semibold">
             Nuevo Producto
             <FontAwesomeIcon icon={faToolbox} />
           </Link>
         </div>
-        <div className={`${COLUMNS_CLASSES} bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold rounded-t-2xl`}>
+        <div className={`${COLUMNS_CLASSES} bg-linear-to-r from-blue-600 to-blue-700 text-white font-bold rounded-t-2xl`}>
           <div className="truncate">Nombre</div>
           <div className="truncate">Marca</div>
           <div className="truncate">Modelo</div>
@@ -92,7 +92,7 @@ function ListProduct() {
           onClick={goToPrevious}
           disabled={!prevPage}
           className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md
-                       ${prevPage ? 'bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white hover:from-blue-600 hover:to-blue-700 dark:hover:from-blue-700 dark:hover:to-blue-800 hover:shadow-lg' : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'}`}
+                       ${prevPage ? 'bg-linear-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white hover:from-blue-600 hover:to-blue-700 dark:hover:from-blue-700 dark:hover:to-blue-800 hover:shadow-lg' : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'}`}
         >
           Anterior
         </button>
@@ -105,7 +105,7 @@ function ListProduct() {
           onClick={goToNext}
           disabled={!nextPage}
           className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md
-                       ${nextPage ? 'bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white hover:from-blue-600 hover:to-blue-700 dark:hover:from-blue-700 dark:hover:to-blue-800 hover:shadow-lg' : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'}`}
+                       ${nextPage ? 'bg-linear-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white hover:from-blue-600 hover:to-blue-700 dark:hover:from-blue-700 dark:hover:to-blue-800 hover:shadow-lg' : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'}`}
         >
           Siguiente
         </button>

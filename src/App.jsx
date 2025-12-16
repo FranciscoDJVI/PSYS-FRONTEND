@@ -9,6 +9,7 @@ import { Toaster } from 'react-hot-toast';
 import Login from "./components/Login.jsx";
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import { SellProvider } from "./context/SellProvider";
 
 function AppContent() {
   const { isDark } = useTheme();
@@ -57,7 +58,9 @@ function AppContent() {
 function App() {
   return (
     <ThemeProvider>
-      <AppContent />
+      <SellProvider>
+        <AppContent />
+      </SellProvider>
     </ThemeProvider>
   );
 }
