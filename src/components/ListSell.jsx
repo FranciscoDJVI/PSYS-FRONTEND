@@ -1,27 +1,35 @@
-import { useEffect, useState } from "react";
-import { GetSell } from "../api/api.sell";
+import { useSells } from "../hooks/useSells";
 import FormatterPesos from "../utils/CurrencyFormatter";
 
 
 function ListSellRegister() {
-  const [sellRegister, setSellRegister] = useState([]);
+  const {
+    sells,
+    isLoading,
+    error,
+    nextPage,
+    prevPage,
+    totalCount,
+    goToNext,
+    goToPrevious,
+  } = useSells();
 
+  if (isLoading) {
+    return <div className="p-6 text-center"><p className="text-lg font-medium text-gray-600">Cargando ventas...</p></div>
+  }
 
-  useEffect(() => {
-    async function loadSell() {
-      try {
-        const response = await GetSell();
-        setSellRegister(response.data.results);
-      } catch (error) {
-        console.error("Error al cargar ventas:", error);
-      }
-    }
-    loadSell();
-  }, []);
+  if (error) {
+    return <div className="p-6 text-center"><p className="text-lg font-medium text-red-600 bg-red-50 p-4 rounded-lg">Error al cargar las ventas.</p></div>
+  }
+
+  if (sells.length === 0) {
+    return <div className="p-6 text-center"><p className="text-lg text-gray-500 bg-gray-50 p-4 rounded-lg">No hay ventas registradas.</p></div>
+  }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-      {sellRegister.map((sell) => (
+    <div className="p-6 overflow-x-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+        {sells.map((sell) => (
         <div
           key={sell.sell_id}
           className={`bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 ${(sell.status)}`}
@@ -62,6 +70,31 @@ function ListSellRegister() {
           ))}
         </div>
       ))}
+      </div>
+      <div className="flex justify-between items-center p-6 mt-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700">
+        <button
+          onClick={goToPrevious}
+          disabled={!prevPage}
+          className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md
+                       ${prevPage ? 'bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white hover:from-blue-600 hover:to-blue-700 dark:hover:from-blue-700 dark:hover:to-blue-800 hover:shadow-lg' : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'}`}
+        >
+          Anterior
+        </button>
+
+        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+          Total de Ventas: {totalCount}
+        </span>
+
+        <button
+          onClick={goToNext}
+          disabled={!nextPage}
+          className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md
+                       ${nextPage ? 'bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white hover:from-blue-600 hover:to-blue-700 dark:hover:from-blue-700 dark:hover:to-blue-800 hover:shadow-lg' : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'}`}
+        >
+          Siguiente
+        </button>
+
+      </div>
     </div>
   );
 }

@@ -16,7 +16,6 @@ export function useProducts() {
     try {
       setIsLoading(true);
       const res = await GetProducts(url || "products/")
-      console.log(url, res.data)
       setProducts(res.data.results);
       setNextPage(res.data.next);
       setPrevPage(res.data.previous);

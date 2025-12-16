@@ -47,7 +47,6 @@ function SellForm() {
     try {
       const allData = await GetproductsSearch();
       const res = allData.data;
-      console.log(res)
       const productSearch = res.filter(producto =>
         producto.name.toLowerCase().includes(normalizedQuery)
       );
@@ -136,8 +135,9 @@ function SellForm() {
       sells: apiSells,
       type_pay: sellFormData.type_pay
     };
-    console.log(dataToSend)
+
     const response = await PostSell(dataToSend);
+
     if (response.status !== 201) {
       toast.error("Error al realizar la venta");
     } else {

@@ -8,7 +8,7 @@ function Navbar() {
 
   return (
     <div>
-      <nav className="flex flex-row gap-6 font-medium mb-10 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+      <nav className="flex flex-row items-center gap-6 font-medium mb-10 bg-white dark:bg-gray-800 p-4 dark:border-gray-700 text-xl">
         <Link to="/psys" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">Home</Link>
         <Link to="/products" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">Productos</Link>
         <Link to="/sells" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">Ventas</Link>
