@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { GetProduct, UpdateProduct } from '../api/api.products';
 import ProductForm from '../components/ProductForm';
+import logger from '../utils/logger';
 import toast from 'react-hot-toast';
 
 function UpdateProductPage() {
@@ -17,6 +18,7 @@ function UpdateProductPage() {
           setProduct(res.data);
           setError(null)
         } catch (error) {
+          logger.error("Error loading product data:", error);
           setError("Error loading product data:", error);
         }
 
@@ -30,7 +32,7 @@ function UpdateProductPage() {
       await UpdateProduct(id, data);
       toast.success('Producto actualizado exitosamente');
     } catch (error) {
-      console.error('Error updating product:', error);
+      logger.error('Error updating product:', error);
       toast.error('Error al actualizar el producto');
     }
   };

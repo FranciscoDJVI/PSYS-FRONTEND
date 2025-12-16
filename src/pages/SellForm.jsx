@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping, faShoppingBag, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { PostSell } from "../api/api.sell"
 import FormatterPesos from "../utils/CurrencyFormatter";
+import logger from "../utils/logger";
 
 const INITIAL_STATE = {
   id_product: "",
@@ -52,7 +53,7 @@ function SellForm() {
       );
       setResults(productSearch);
     } catch (error) {
-      console.error("Error al obtener o filtrar productos:", error);
+      logger.error("Error al obtener o filtrar productos:", error);
       setResults([]);
     } finally {
       setLoading(false);
@@ -136,17 +137,25 @@ function SellForm() {
       type_pay: sellFormData.type_pay
     };
 
-    const response = await PostSell(dataToSend);
+    try {
+      const response = await PostSell(dataToSend);
 
-    if (response.status !== 201) {
-      toast.error("Error al realizar la venta");
-    } else {
-      toast.success("Venta realizada con éxito!");
-      setFormData(INITIAL_STATE);
-      setCar([])
-      setApiSells([])
-      setTotal(0)
-      setSelectedProduct(null);
+      if (response.status !== 201 && response.status !== 200) {
+        toast.error("Error al realizar la venta");
+      } else {
+        toast.success("Venta realizada con éxito!");
+        setFormData(INITIAL_STATE);
+        setCar([])
+        setApiSells([])
+        setTotal(0)
+        setSelectedProduct(null);
+      }
+    } catch (error) {
+      // Error ya está loggeado por axiosClient interceptor
+      if (import.meta.env.DEV) {
+        logger.warn('Error adicional en handleSubmit:', error.message);
+      }
+      toast.error("Error al realizar la venta. Verifica tu conexión.");
     }
     // Reset states to 0 after each sale.
     setTotalSell(0);
@@ -226,14 +235,14 @@ function SellForm() {
           <div className="flex gap-4 mt-6">
             <button
               type="submit"
-              className="flex-1 bg-gradient-to-r from-green-500 to-green-600 dark:from-green-600 dark:to-green-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105"
+              className="flex-1 bg-linear-to-r from-green-500 to-green-600 dark:from-green-600 dark:to-green-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105"
             >
               Vender
             </button>
             <button
               type="button"
               onClick={handleAddCar}
-              className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
+              className="flex-1 bg-linear-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
             >
               <FontAwesomeIcon icon={faShoppingBag} />
               Agregar al Carrito

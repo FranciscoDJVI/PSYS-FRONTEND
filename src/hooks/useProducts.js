@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { GetProducts, DeleteProduct as DeleteProduct } from '../api/api.products';
+import logger from '../utils/logger';
 import toast from 'react-hot-toast';
 
 export function useProducts() {
@@ -22,7 +23,7 @@ export function useProducts() {
       setTotalCount(res.data.count);
     } catch (error) {
       setError(error);
-      console.error("Error al cargar productos:", error);
+      logger.error("Error al cargar productos:", error);
     } finally {
       setIsLoading(false);
     }
@@ -54,7 +55,7 @@ export function useProducts() {
       );
       toast.success('Producto eliminado exitosamente');
     } catch (err) {
-      console.log(err)
+      logger.error('Error al eliminar el producto:', err);
     }
   };
   return {

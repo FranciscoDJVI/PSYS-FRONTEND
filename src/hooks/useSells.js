@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { GetSell } from '../api/api.sell';
+import logger from '../utils/logger';
+import toast from 'react-hot-toast';
 
 export function useSells() {
   const [sells, setSells] = useState([]);
@@ -21,7 +23,8 @@ export function useSells() {
       setTotalCount(res.data.count);
     } catch (error) {
       setError(error);
-      console.error("Error al cargar ventas:", error);
+      logger.error("Error al cargar ventas:", error);
+      toast.error('Error al cargar las ventas.');
     } finally {
       setIsLoading(false);
     }

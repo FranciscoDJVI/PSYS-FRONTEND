@@ -1,5 +1,7 @@
 import React, { useState, createContext, useContext, useCallback, useEffect } from 'react';
 import axiosClient from '../api/axiosClient';
+import logger from '../utils/logger';
+import toast from 'react-hot-toast';
 
 const API_LOGIN_URL = 'auth/token/';
 const API_LOGOUT_URL = 'auth/logout/';
@@ -39,19 +41,20 @@ export const AuthProvider = ({ children }) => {
 
       const { access, refresh, user_data, role } = response.data;
 
-       localStorage.setItem('access_token', access);
-       localStorage.setItem('refresh_token', refresh);
-       localStorage.setItem('userRole', role);
-       localStorage.setItem('user', JSON.stringify(user_data || { username }));
+      localStorage.setItem('access_token', access);
+      localStorage.setItem('refresh_token', refresh);
+      localStorage.setItem('userRole', role);
+      localStorage.setItem('user', JSON.stringify(user_data || { username }));
 
-       setUser(user_data || { username });
-       setRole(role);
-       setAccessToken(access);
+      setUser(user_data || { username });
+      setRole(role);
+      setAccessToken(access);
 
       return response.data;
 
     } catch (error) {
-      console.error('Login fallido:', error.response?.data || error.message);
+      logger.error('Login fallido:', error.response?.data || error.message);
+      toast.error('Error de inicio de sesión. Por favor, verifica tus credenciales.');
       logout();
       throw error;
     }
@@ -69,7 +72,7 @@ export const AuthProvider = ({ children }) => {
           if (error.response?.status === 401) {
             logout();
           } else {
-            console.warn("Error de red en refresh silencioso, manteniendo sesión.");
+            logger.warn("Error de red en refresh silencioso, manteniendo sesión.");
           }
         }
       };

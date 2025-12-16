@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import logger from '../utils/logger';
+import toast from 'react-hot-toast';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -19,7 +21,8 @@ const Login = () => {
       navigate(from, { replace: true });
       navigate('/psys');
     } catch (err) {
-      console.error('Login fallido:', err.response ? err.response.data : err.message);
+      logger.error('Login fallido', err);
+      toast.error('Error de inicio de sesión. Por favor, verifica tus credenciales.');
       setError('Credenciales inválidas. Por favor, verifica tu usuario y contraseña.');
     }
   };
@@ -58,7 +61,7 @@ const Login = () => {
         </div>
 
         <div className='text-center mt-6'>
-          <button type="submit" className='bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 hover:from-blue-600 hover:to-blue-700 dark:hover:from-blue-700 dark:hover:to-blue-800 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300'>Ingresar</button>
+          <button type="submit" className='bg-linear-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 hover:from-blue-600 hover:to-blue-700 dark:hover:from-blue-700 dark:hover:to-blue-800 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300'>Ingresar</button>
         </div>
       </form>
     </div>

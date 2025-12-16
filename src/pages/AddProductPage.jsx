@@ -1,6 +1,7 @@
 import ProductForm from '../components/ProductForm';
 import { PostProducts } from '../api/api.products';
 import toast from 'react-hot-toast';
+import logger from '../utils/logger';
 
 function AddProduct() {
   const handleCreate = async (data) => {
@@ -8,7 +9,7 @@ function AddProduct() {
       await PostProducts(data);
       toast.success('Producto agregado exitosamente');
     } catch (error) {
-      console.error('Error creating product:', error);
+      logger.error('Error creating product:', error);
       toast.error('Error al agregar el producto');
     }
   };
