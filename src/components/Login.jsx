@@ -15,6 +15,8 @@ const Login = () => {
 
     try {
       await login(username, password);
+      const from = location.state?.from?.pathname || '/psys';
+      navigate(from, { replace: true });
       navigate('/psys');
     } catch (err) {
       console.error('Login fallido:', err.response ? err.response.data : err.message);

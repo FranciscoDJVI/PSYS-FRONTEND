@@ -15,7 +15,6 @@ export function useSells() {
     try {
       setIsLoading(true);
       const res = await GetSell(url || "sells/")
-      console.log(url, res.data)
       setSells(res.data.results);
       setNextPage(res.data.next);
       setPrevPage(res.data.previous);

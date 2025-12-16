@@ -7,8 +7,8 @@ import Sell from "./pages/Sells.jsx";
 import SellRegister from './pages/SellRegister.jsx'
 import { Toaster } from 'react-hot-toast';
 import Login from "./components/Login.jsx";
-import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 function AppContent() {
   const { isDark } = useTheme();
@@ -43,12 +43,11 @@ function AppContent() {
       />
       <Routes>
         <Route path="/" element={<Login />}></Route>
-        <Route path='/psys' element={<Home />}></Route>
-        <Route path="/products" element={<Products />}></Route>
-        <Route path="/add-products" element={<AddProduct />}></Route>
-        <Route path="/update-product/:id" element={<UpdateProductPage />}></Route>
-        <Route path="/sells" element={<Sell />}></Route>
-        <Route path="/sell-register" element={<SellRegister />}></Route>
+        <Route path='/psys' element={<ProtectedRoute> <Home /></ProtectedRoute>}></Route>            <Route path="/products" element={<Products />}></Route>
+        <Route path="/add-products" element={<ProtectedRoute><AddProduct /></ProtectedRoute>}></Route>
+        <Route path="/update-product/:id" element={<ProtectedRoute><UpdateProductPage /></ProtectedRoute>}></Route>
+        <Route path="/sells" element={<ProtectedRoute><Sell /></ProtectedRoute>}></Route>
+        <Route path="/sell-register" element={<ProtectedRoute><SellRegister /></ProtectedRoute>}></Route>
       </Routes>
     </div >
   );
@@ -57,9 +56,7 @@ function AppContent() {
 function App() {
   return (
     <ThemeProvider>
-      <AuthProvider>
-        <AppContent />
-      </AuthProvider>
+      <AppContent />
     </ThemeProvider>
   );
 }
