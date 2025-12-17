@@ -1,6 +1,6 @@
 # PSYS
 
-Una aplicación moderna basada en React para un sistema de punto de venta (POS), construida con Vite, Tailwind CSS e integrada con un backend Django vía API REST.
+Una aplicación moderna basada en React para un sistema de punto de venta (POS), construida con Vite, Tailwind CSS e integrada con un API REST construida con DRF.
 
 ## Características
 
