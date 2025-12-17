@@ -39,7 +39,9 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await axiosClient.post(API_LOGIN_URL, { username, password });
 
-      const { access, refresh, user_data, role } = response.data;
+      const { access, refresh, user_data, roles } = response.data;
+
+      const role = roles && roles.length > 0 ? roles[0] : '';
 
       localStorage.setItem('access_token', access);
       localStorage.setItem('refresh_token', refresh);

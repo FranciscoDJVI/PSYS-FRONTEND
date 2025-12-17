@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { use, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import logger from '../utils/logger';
@@ -17,6 +17,12 @@ const Login = () => {
 
     try {
       await login(username, password);
+      if (username !== 'admin') {
+        toast.success('Inicio de sesión exitoso. ¡Bienvenido!');
+        navigate('/psys');
+        return;
+      }
+      //
       const from = location.state?.from?.pathname || '/psys';
       navigate(from, { replace: true });
       navigate('/psys');
