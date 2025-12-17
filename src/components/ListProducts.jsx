@@ -5,7 +5,6 @@ import { faToolbox, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import CardProduct from "./CardProduct";
 
 // Clase de Tailwindcss para la disposición de columnas, usada en encabezado y filas
-// Actualizado: grid-cols dinámico con gap y place-items-start para mejor alineación
 const COLUMNS_CLASSES = (canManage) => `grid ${canManage ? 'grid-cols-8' : 'grid-cols-7'} gap-4 place-items-start p-5`;
 function ListProduct({ canManage = false }) {
   const {
@@ -19,6 +18,7 @@ function ListProduct({ canManage = false }) {
     goToNext,
     goToPrevious,
   } = useProducts();
+
 
   const sortedProducts = [...products].sort((a, b) => a.name.localeCompare(b.name));
   const handleDelete = (id) => {
