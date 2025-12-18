@@ -48,7 +48,7 @@ function ListSellRegister() {
             </div>
             <div className="mb-4">
               <p className="text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wide">Tipo de pago</p>
-              <p className="text-xl font-bold text-green-600 dark:text-green-400">${sell.type_pay}</p>
+              <p className="text-xl font-bold text-green-600 dark:text-green-400">{sell.type_pay}</p>
             </div>
 
             <div className="mb-4">

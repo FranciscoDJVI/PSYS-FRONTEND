@@ -164,7 +164,7 @@ function SellForm() {
       if (import.meta.env.DEV) {
         logger.warn('Error adicional en handleSubmit:', error.message);
       }
-      toast.error("Error al realizar la venta. Verifica tu conexión.");
+      toast.error("Error al realizar la venta. Verifica stock del producto o tu conexión.");
     }
   };
 
