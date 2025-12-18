@@ -26,30 +26,30 @@ function Home() {
             <div className="relative">
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                className="flex items-center gap-2 text-gray-700 text-2xl dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
                 aria-expanded={isDropdownOpen}
                 aria-haspopup="true"
               >
                 <FontAwesomeIcon icon={faUser} />
                 {user?.username || 'Usuario'}
               </button>
-              
+
               {/* Dropdown menú */}
               {isDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-10">
                   <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-                    <p className="text-sm text-gray-700 dark:text-gray-300">Hola, {user?.username || 'Usuario'}</p>
+                    <p className="text-xl text-gray-700 dark:text-gray-300">Hola, {user?.username || 'Usuario'}</p>
                   </div>
                   <button
                     onClick={handleLogout}
-                    className="w-full text-left px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+                    className="w-full text-left text-xl px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
                   >
                     Cerrar Sesión
                   </button>
                 </div>
               )}
             </div>
-            
+
             {/* Botón toggle tema */}
             <button
               onClick={toggleTheme}
