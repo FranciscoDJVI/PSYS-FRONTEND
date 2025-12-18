@@ -17,12 +17,7 @@ const Login = () => {
 
     try {
       await login(username, password);
-      if (username !== 'admin') {
-        toast.success('Inicio de sesión exitoso. ¡Bienvenido!');
-        navigate('/psys');
-        return;
-      }
-      //
+      toast.success(`Inicio de sesión exitoso. ¡Bienvenido! ${username}`);
       const from = location.state?.from?.pathname || '/psys';
       navigate(from, { replace: true });
       navigate('/psys');
