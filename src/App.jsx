@@ -10,7 +10,7 @@ import Login from "./components/Login.jsx";
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import { SellProvider } from "./context/SellProvider";
-import RegisterUser from "./pages/RegisterUser.jsx";
+import Users from "./pages/Users.jsx";
 
 function AppContent() {
   const { isDark } = useTheme();
@@ -51,7 +51,7 @@ function AppContent() {
         <Route path="/update-product/:id" element={<ProtectedRoute><UpdateProductPage /></ProtectedRoute>}></Route>
         <Route path="/sells" element={<ProtectedRoute><Sell /></ProtectedRoute>}></Route>
         <Route path="/sell-register" element={<ProtectedRoute><SellRegister /></ProtectedRoute>}></Route>
-        <Route path="/register-user" element={<ProtectedRoute><RegisterUser /></ProtectedRoute>}></Route>
+        <Route path="/users" element={<ProtectedRoute><Users /></ProtectedRoute>}></Route>
       </Routes>
     </div >
   );
