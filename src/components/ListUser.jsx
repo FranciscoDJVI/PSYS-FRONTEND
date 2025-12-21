@@ -25,11 +25,11 @@ function ListUsers() {
 
   return (
     <div className="bg-gray-200 dark:bg-gray-800">
-      <h1 className="text-white p-2 rounded-xl font-extrabold">Usuarios</h1>
+      <h1 className="text-xl text-white p-2 rounded-xl font-extrabold">Usuarios</h1>
       <div className="flex flex-col items-left mt-5">
         {Array.isArray(users) ? (
           users.map((user) => (
-            <div key={user.id} className="hover:bg-gray-700 p-2 rounded-xl mt-2">
+            <div key={user.id} className="text-xl m-5 hover:bg-gray-700 p-2 rounded-xl mt-2">
               <div>{user.username}</div>
             </div>
           ))

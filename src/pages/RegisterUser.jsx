@@ -12,6 +12,7 @@ const GROUPS_DICT = {
 function RegisterUser() {
   const [formData, setFormData] = useState({
     username: "",
+    email: "",
     is_staff: false,
     password: "",
     groups: ""
@@ -60,6 +61,14 @@ function RegisterUser() {
               name="username"
               placeholder="Username"
               value={formData.username}
+              onChange={handleChange}
+              required={true}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-400"
+            />
+            <input
+              name="email"
+              placeholder="email"
+              value={formData.email}
               onChange={handleChange}
               required={true}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-400"
