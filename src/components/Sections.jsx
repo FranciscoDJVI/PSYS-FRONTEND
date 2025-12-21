@@ -5,7 +5,6 @@ import {
   faCartShopping,
   faObjectGroup,
   faInfoCircle,
-  faUser,
   faUserEdit,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -43,7 +42,7 @@ function Sections() {
             Ventas
           </Link>
           <Link
-            to="/register-user"
+            to="/users"
             className="bg-linear-to-r from-yellow-400 to-yellow-500 dark:from-yelloe-500 dark:to-yellow-600 text-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col items-center justify-center text-center font-semibold hover:scale-105 transform"
           >
             <FontAwesomeIcon icon={faUserEdit} className="text-3xl mb-2" />

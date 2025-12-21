@@ -22,7 +22,8 @@ function Navbar() {
         <Link to="/products" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">Productos</Link>
         <Link to="/sells" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">Ventas</Link>
         <Link to="/sell-register" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">Registros de Ventas</Link>
-        
+        <Link to="/users" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">Usuarios</Link>
+
         <div className="ml-auto flex items-center gap-4">
           {/* Botón de usuario con dropdown */}
           <div className="relative">
@@ -35,7 +36,7 @@ function Navbar() {
               <FontAwesomeIcon icon={faUser} />
               {user?.username || 'Usuario'}
             </button>
-            
+
             {/* Dropdown menú */}
             {isDropdownOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-10">
@@ -51,7 +52,7 @@ function Navbar() {
               </div>
             )}
           </div>
-          
+
           {/* Botón toggle tema */}
           <button
             onClick={toggleTheme}
