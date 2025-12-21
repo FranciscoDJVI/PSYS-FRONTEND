@@ -29,13 +29,13 @@ function ListUsers() {
     <div className="bg-white dark:bg-gray-800 mb-5">
       <div className='mt-5 ml-5 mr-5 p-2 border border-gray-300 dark:border-gray-700 rounded-xl text-xl '>Roles:
         <ul className="flex flex-row flex-wrap gap-4 p-2">
-          <li ><FontAwesomeIcon icon={faTag} className="text-red-600" />Admin</li>
+          <li ><FontAwesomeIcon icon={faTag} className="text-red-500" />Admin</li>
           <li ><FontAwesomeIcon icon={faTag} className="text-cyan-600" />Administrado tienda</li>
           <li ><FontAwesomeIcon icon={faTag} className="text-green-500" />Vendedor</li>
         </ul>
       </div>
       <h1 className="text-xl text-white p-2 m-5 rounded-xl font-extrabold">Usuarios</h1>
-      <div className="">
+      <div className="max-h-64 overflow-y-auto">
         {Array.isArray(users) ? (
           users.map((user, index) => (
             <div key={index} className="text-xl m-5 p-2 rounded-xl mt-2">
