@@ -13,7 +13,7 @@ function Home() {
 
   const handleLogout = () => {
     logout();
-    setIsDropdownOpen(false); // Cerrar dropdown al logout
+    setIsDropdownOpen(false);
   };
 
   return (
@@ -22,7 +22,6 @@ function Home() {
         <div className="flex flex-row justify-between items-center w-full">
           <h1 className="title-principal text-4xl font-bold text-gray-800 dark:text-white">Psys</h1>
           <div className="flex items-center gap-4">
-            {/* Botón de usuario con dropdown */}
             <div className="relative">
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -34,7 +33,6 @@ function Home() {
                 {user?.username || 'Usuario'}
               </button>
 
-              {/* Dropdown menú */}
               {isDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-10">
                   <div className="p-4 border-b border-gray-200 dark:border-gray-700">
@@ -50,7 +48,6 @@ function Home() {
               )}
             </div>
 
-            {/* Botón toggle tema */}
             <button
               onClick={toggleTheme}
               className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"

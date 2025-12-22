@@ -13,7 +13,7 @@ function CustomTag({ username, rol }) {
   const iconColor = roleColors[rol] || roleColors.default;
 
   return (
-    <div className="flex items-center gap-2 p-2 py-1 rounded-xl w-100% bg-gray-200 dark:bg-gray-700">
+    <div className="flex items-center gap-2 p-2 py-1 rounded-xl w-100% ">
       <h1 className="text-xl font-semibold text-black dark:text-white capitalize p-2">{username}</h1>
       <FontAwesomeIcon
         icon={faTag}

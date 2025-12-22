@@ -77,7 +77,6 @@ function ListUsers() {
                 <button type="button" onClick={() => handleDeleteUser(user.id)}><FontAwesomeIcon icon={faTrash} className="text-red-500 hover:text-red-700 transition-colors" />
                 </button>
               </div>
-              <h2>{typeof (user.id)}</h2>
             </div>
           ))
         ) : (
