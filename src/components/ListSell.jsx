@@ -28,7 +28,7 @@ function ListSellRegister() {
 
   return (
     <div className='h-ful min-h-screen bg-gray-1000 bg-white dark:bg-gray-900 p-2'>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 p-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-2">
         {sells.map((sell) => (
           <div
             key={sell.sell_id}
