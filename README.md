@@ -4,16 +4,63 @@ Una aplicación moderna basada en React para un sistema de punto de venta (POS),
 
 ## Características
 
-- ✅ Autenticación de usuarios con tokens JWT y refresh automático
-- ✅ Gestión completa de productos (CRUD) con paginación
-- ✅ Gestión de inventario/stock en tiempo real
-- ✅ Registro y seguimiento de ventas con cálculo automático
-- ✅ Interfaz de usuario responsiva con Tailwind CSS
-- ✅ Tema oscuro/claro dinámico
-- ✅ Notificaciones con React Hot Toast
-- ✅ Manejo robusto de errores con límites de error
-- ✅ Formularios con validación (React Hook Form)
-- ✅ Suite completa de pruebas unitarias e integración
+### 🔐 Autenticación y Seguridad
+- Autenticación JWT con refresh automático de tokens
+- Control de acceso basado en roles (Admin, Administrador_tienda, Vendedor)
+- Rutas protegidas y gestión de sesiones persistente
+- Refresco silencioso de tokens en recarga de página
+
+### 📦 Gestión de Productos
+- Operaciones CRUD completas para inventario de productos
+- Listado paginado con búsqueda y filtros
+- Indicadores visuales de stock (verde >10, amarillo 1-10, rojo 0)
+- Permisos basados en roles (Admin/Administrador_tienda pueden gestionar)
+
+### 💰 Procesamiento de Ventas
+- Sistema de carrito interactivo para construcción de ventas
+- Búsqueda y selección de productos
+- Cálculo automático de IVA (19%) y totales
+- Soporte para múltiples tipos de pago (efectivo, tarjetas, transferencias)
+- Historial de ventas con registros detallados
+
+### 👥 Administración de Usuarios
+- Gestión de cuentas de usuario con asignación de roles
+- Creación y edición de usuarios con validación
+- Manejo seguro de contraseñas (opcional en actualizaciones)
+- Indicadores visuales de roles y estado de staff
+
+### 🎨 Experiencia de Usuario
+- Alternancia de tema oscuro/claro con persistencia
+- Diseño responsivo para todos los tamaños de dispositivo
+- Notificaciones toast para feedback del usuario
+- Límites de error para manejo robusto de fallos
+- Formularios con validación usando React Hook Form
+- Suite completa de pruebas unitarias e integración
+
+## Módulos Principales
+
+### Dashboard (Home)
+- Página principal con accesos directos a módulos principales
+- Componente Sections con cards responsivos
+- Navegación intuitiva basada en roles
+
+### Productos
+- Listado paginado de productos con vistas de tabla (desktop) y cards (móvil)
+- Formularios de creación/edición con validación completa
+- Campos: nombre, marca, modelo, dimensiones, descripción, precio, stock
+
+### Ventas
+- Formulario de venta con carrito dinámico y búsqueda de productos
+- Cálculos automáticos de subtotal, IVA y cambio
+- Historial paginado de transacciones
+
+### Usuarios
+- Listado de usuarios con roles visuales (Admin, Administrador_tienda, Vendedor)
+- Formularios de registro y actualización con manejo de grupos
+
+### Navegación y Tema
+- Barra de navegación con menú de usuario y toggle de tema
+- Contexto de tema con persistencia en localStorage
 
 ## Tecnologías Utilizadas
 
@@ -54,8 +101,11 @@ Una aplicación moderna basada en React para un sistema de punto de venta (POS),
 
 ## Uso
 
-- Inicia sesión con tus credenciales.
-- Navega por las secciones: Productos, Inventario, Ventas.
+- Inicia sesión con tus credenciales (dependiendo del rol: Admin, Administrador_tienda o Vendedor).
+- Navega por las secciones disponibles según permisos: Dashboard, Productos, Ventas, Usuarios.
+- Admin: Acceso completo a todos los módulos.
+- Administrador_tienda: Gestión de productos y ventas.
+- Vendedor: Solo ventas.
 - Agrega, actualiza o visualiza elementos según sea necesario.
 
 ## Integración con API
