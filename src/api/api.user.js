@@ -6,5 +6,7 @@ export const GetUserById = (id) => axiosClient.get(`users/${id}/`);
 
 export const PostUser = (user) => axiosClient.post('users/', user);
 
+export const UpdateUser = (id, user) => axiosClient.put(`users/${id}/`, user)
+
 export const DeleteUser = (id) => axiosClient.delete(`users/${id}/`);
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { GetUsers } from "../api/api.user";
+import { GetUsers, GetUserById } from "../api/api.user";
 import logger from "../utils/logger";
 import CustomTag from "./customTag";
 import { faTrash, faPen } from "@fortawesome/free-solid-svg-icons";
@@ -7,10 +7,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTag } from "@fortawesome/free-solid-svg-icons";
 import { DeleteUser } from "../api/api.user";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 function ListUsers() {
 
   const [users, setUsers] = useState([])
+  const navigate = useNavigate()
 
   const LoadUsers = async () => {
 
@@ -35,6 +37,7 @@ function ListUsers() {
       return;
     }
 
+
     try {
       const response = await DeleteUser(id);
 
@@ -50,7 +53,21 @@ function ListUsers() {
         alert(`Error del servidor: ${error.response.data.message || 'Error interno'}`);
       }
     }
-  }; return (
+  };
+  const handleUpdateUser = async (id) => {
+    try {
+      const response = await GetUserById(id);
+      logger.info('User data for update:', response.data);
+      navigate('/update-user', {
+        state: {
+          user: response.data
+        }
+      });
+    } catch (error) {
+      console.error('Error fetching user:', error);
+    }
+  }
+  return (
     <div className="bg-white dark:bg-gray-800 mb-5 shadow-lg rounded-lg overflow-hidden">
       <div className='mt-5 ml-5 mr-5 p-2 border border-gray-300 dark:border-gray-700 rounded-xl text-xl '>Roles:
         <ul className="flex flex-row flex-wrap gap-4 p-2">
@@ -73,7 +90,8 @@ function ListUsers() {
               <div className="text-left"><CustomTag username={user.username} rol={user.roles} /></div>
               <div className="text-left">{user.roles}</div>
               <div className="flex gap-2 justify-center">
-                <FontAwesomeIcon icon={faPen} className="text-blue-500 hover:text-blue-700 transition-colors" />
+                <button type="button" onClick={() => handleUpdateUser(user.id)}><FontAwesomeIcon icon={faPen} className="text-blue-500 hover:text-blue-700 transition-colors" />
+                </button>
                 <button type="button" onClick={() => handleDeleteUser(user.id)}><FontAwesomeIcon icon={faTrash} className="text-red-500 hover:text-red-700 transition-colors" />
                 </button>
               </div>
