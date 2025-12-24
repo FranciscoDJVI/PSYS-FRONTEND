@@ -18,11 +18,11 @@ function Navbar() {
   return (
     <div>
       <nav className="flex flex-row flex-wrap items-center gap-6 font-medium mb-10 bg-white dark:bg-gray-800 p-4 dark:border-gray-700 text-xl">
-        <Link to="/psys" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">Home</Link>
-        <Link to="/products" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">Productos</Link>
-        <Link to="/sells" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">Ventas</Link>
-        <Link to="/sell-register" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">Registros de Ventas</Link>
-        <Link to="/users" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">Usuarios</Link>
+        <Link to="/psys" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">Home/</Link>
+        <Link to="/products" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">Productos/</Link>
+        <Link to="/sells" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">Ventas/</Link >
+        <Link to="/sell-register" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">Registros de Ventas/</Link>
+        <Link to="/users" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">Usuarios/</Link>
 
         <div className="ml-auto flex items-center gap-4">
           {/* Botón de usuario con dropdown */}

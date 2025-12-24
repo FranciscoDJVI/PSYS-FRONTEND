@@ -11,6 +11,8 @@ const GROUPS_DICT = {
 
 function RegisterUser() {
   const [formData, setFormData] = useState({
+    first_name: "",
+    last_name: "",
     username: "",
     email: "",
     is_staff: false,
@@ -57,6 +59,23 @@ function RegisterUser() {
       <div className="flex justify-center">
         <div className="max-w-md w-full shadow-2xl rounded-2xl bg-white dark:bg-gray-800 p-6 dark:border-gray-700">
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <input
+              name="first_name"
+              placeholder="Firstname"
+              value={formData.first_name}
+              onChange={handleChange}
+              required={true}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-400"
+            />
+            <input
+              name="last_name"
+              placeholder="Lastname"
+              value={formData.last_name}
+              onChange={handleChange}
+              required={true}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-400"
+            />
+
             <input
               name="username"
               placeholder="Username"
