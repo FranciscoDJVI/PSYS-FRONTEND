@@ -7,9 +7,11 @@ import {
   faInfoCircle,
   faUserEdit,
 } from "@fortawesome/free-solid-svg-icons";
+import { useAuth } from "../context/AuthContext";
 
 function Sections() {
   const [showInfo, setShowInfo] = useState(false);
+  const { role, isAuthenticated } = useAuth()
 
   return (
     <div>
@@ -41,17 +43,18 @@ function Sections() {
             <FontAwesomeIcon icon={faCartShopping} className="text-5xl mb-2" />
             Ventas
           </Link>
-          <Link
-            to="/users"
-            className="bg-linear-to-r text-2xl from-cyan-400 to-cyan-500 dark:from-cyan-500 dark:to-cyan-600 text-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col items-center justify-center text-center font-semibold h-50"
-          >
-            <FontAwesomeIcon icon={faUserEdit} className="text-5xl mb-2" />
-            Usuarios
-          </Link>
-
+          {(role === 'Admin' || role === 'Administrador_tienda') && (
+            < Link
+              to="/users"
+              className="bg-linear-to-r text-2xl from-cyan-400 to-cyan-500 dark:from-cyan-500 dark:to-cyan-600 text-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col items-center justify-center text-center font-semibold h-50"
+            >
+              <FontAwesomeIcon icon={faUserEdit} className="text-5xl mb-2" />
+              Usuarios
+            </Link>
+          )}
         </div>
-      </section>
-    </div>
+      </section >
+    </div >
   );
 }
 export default Sections;
